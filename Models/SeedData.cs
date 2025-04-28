@@ -6,20 +6,19 @@ namespace FileManagementAPI.Models
     {
         public static async Task Initialize(
             UserManager<AppUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<Role> roleManager)
         {
-            // Create roles if they don't exist
             string[] roleNames = { "Admin", "User" };
+
             foreach (var roleName in roleNames)
             {
                 var roleExist = await roleManager.RoleExistsAsync(roleName);
                 if (!roleExist)
                 {
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                    await roleManager.CreateAsync(new Role { Name = roleName });
                 }
             }
 
-            // Create admin user if it doesn't exist
             var adminUser = await userManager.FindByEmailAsync("admin@example.com");
             if (adminUser == null)
             {

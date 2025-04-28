@@ -224,7 +224,7 @@ namespace FileManagementAPI.Migrations
                         new
                         {
                             Id = "b5b62c7a-6241-4d8a-81c6-f4f63f123abc",
-                            CreatedAt = new DateTime(2025, 4, 13, 13, 23, 28, 733, DateTimeKind.Utc).AddTicks(7903),
+                            CreatedAt = new DateTime(2025, 4, 25, 12, 30, 8, 836, DateTimeKind.Utc).AddTicks(47),
                             Description = "Administrator role",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -232,7 +232,7 @@ namespace FileManagementAPI.Migrations
                         new
                         {
                             Id = "e3b4f7d1-1de3-4b4a-a648-52ff5f4c0b23",
-                            CreatedAt = new DateTime(2025, 4, 13, 13, 23, 28, 734, DateTimeKind.Utc).AddTicks(6071),
+                            CreatedAt = new DateTime(2025, 4, 25, 12, 30, 8, 837, DateTimeKind.Utc).AddTicks(8265),
                             Description = "Standard user role",
                             Name = "User",
                             NormalizedName = "USER"
@@ -373,7 +373,7 @@ namespace FileManagementAPI.Migrations
                     b.HasOne("FileManagementAPI.Models.AppUser", "User")
                         .WithMany("Folders")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ParentFolder");
@@ -386,7 +386,7 @@ namespace FileManagementAPI.Migrations
                     b.HasOne("FileManagementAPI.Models.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -395,7 +395,7 @@ namespace FileManagementAPI.Migrations
                     b.HasOne("FileManagementAPI.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -404,7 +404,7 @@ namespace FileManagementAPI.Migrations
                     b.HasOne("FileManagementAPI.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -413,13 +413,13 @@ namespace FileManagementAPI.Migrations
                     b.HasOne("FileManagementAPI.Models.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FileManagementAPI.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -428,7 +428,7 @@ namespace FileManagementAPI.Migrations
                     b.HasOne("FileManagementAPI.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

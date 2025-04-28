@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\VICTUS\\Desktop\\FileManagementAPI\\FileManagementAPI\\FileManagementAPI.csproj": {}
+    "C:\\Users\\VICTUS\\Desktop\\İntProg\\FileManagementAPI\\FileManagementAPI\\FileManagementAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\VICTUS\\Desktop\\FileManagementAPI\\FileManagementAPI\\FileManagementAPI.csproj": {
+    "C:\\Users\\VICTUS\\Desktop\\İntProg\\FileManagementAPI\\FileManagementAPI\\FileManagementAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\VICTUS\\Desktop\\FileManagementAPI\\FileManagementAPI\\FileManagementAPI.csproj",
+        "projectUniqueName": "C:\\Users\\VICTUS\\Desktop\\İntProg\\FileManagementAPI\\FileManagementAPI\\FileManagementAPI.csproj",
         "projectName": "FileManagementAPI",
-        "projectPath": "C:\\Users\\VICTUS\\Desktop\\FileManagementAPI\\FileManagementAPI\\FileManagementAPI.csproj",
+        "projectPath": "C:\\Users\\VICTUS\\Desktop\\İntProg\\FileManagementAPI\\FileManagementAPI\\FileManagementAPI.csproj",
         "packagesPath": "C:\\Users\\VICTUS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\VICTUS\\Desktop\\FileManagementAPI\\FileManagementAPI\\obj\\",
+        "outputPath": "C:\\Users\\VICTUS\\Desktop\\İntProg\\FileManagementAPI\\FileManagementAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\VICTUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -46,6 +46,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[14.0.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.13, )"

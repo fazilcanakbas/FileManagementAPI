@@ -95,11 +95,9 @@ namespace FileManagementAPI.Controllers
                 if (string.IsNullOrWhiteSpace(role))
                     return BadRequest(new { Error = "Role name is required" });
 
-                // Check if the role is valid (Admin or User)
                 if (role != "Admin" && role != "User")
                     return BadRequest(new { Error = "Invalid role name. Must be 'Admin' or 'User'" });
 
-                // Check if user already has the role
                 if (await _userRepository.IsInRoleAsync(user, role))
                     return BadRequest(new { Error = "User already has this role" });
 
@@ -124,7 +122,6 @@ namespace FileManagementAPI.Controllers
                 if (user == null)
                     return NotFound(new { Error = "User not found" });
 
-                // Update user properties
                 user.FirstName = userDto.FirstName;
                 user.LastName = userDto.LastName;
                 user.UpdatedAt = DateTime.UtcNow;

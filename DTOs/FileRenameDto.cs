@@ -2,7 +2,7 @@
 
 namespace FileManagementAPI.DTOs
 {
-    public class RenameFileDto
+    public class FileRenameDto
     {
         [Required]
         public string NewName { get; set; } = string.Empty;

@@ -57,9 +57,6 @@ namespace FileManagementAPI.Repositories
             return await _dbSet.CountAsync(f => f.FolderId == folderId);
         }
 
-        //internal void Remove(Models.FileEntity? file)
-        //{
-        //    throw new NotImplementedException();
-        //}
+
     }
 }

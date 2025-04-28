@@ -49,7 +49,6 @@ namespace FileManagementAPI.Controllers
                 if (!result.Succeeded)
                     return BadRequest(new { Errors = result.Errors.Select(e => e.Description) });
 
-                // Assign default role (User)
                 await _userRepository.AddToRoleAsync(user, "User");
 
                 return Ok(new { Message = "User registered successfully" });

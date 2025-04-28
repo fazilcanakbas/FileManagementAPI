@@ -10,7 +10,6 @@
         public string UserId { get; set; } = string.Empty;
         public int? FolderId { get; set; }
 
-        // Navigation properties
         public virtual AppUser? User { get; set; }
         public virtual Folder? Folder { get; set; }
     }

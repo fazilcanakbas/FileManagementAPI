@@ -82,7 +82,6 @@ namespace FileManagementAPI.Controllers
                 if (folder == null)
                     return NotFound(new { Error = "Folder not found" });
 
-                // Check if folder belongs to user or user is admin
                 if (folder.UserId != userId && !User.IsInRole("Admin"))
                     return Forbid();
 
@@ -129,7 +128,6 @@ namespace FileManagementAPI.Controllers
                 if (file == null)
                     return NotFound(new { Error = "File not found" });
 
-                // Check if file belongs to user or user is admin
                 if (file.UserId != userId && !User.IsInRole("Admin"))
                     return Forbid();
 
@@ -168,7 +166,6 @@ namespace FileManagementAPI.Controllers
                 if (fileUploadDto.File == null || fileUploadDto.File.Length == 0)
                     return BadRequest(new { Error = "No file was uploaded" });
 
-                // Check if folder exists and belongs to user if specified
                 if (fileUploadDto.FolderId.HasValue)
                 {
                     var folder = await _folderRepository.GetByIdAsync(fileUploadDto.FolderId.Value);
@@ -179,7 +176,6 @@ namespace FileManagementAPI.Controllers
                         return Forbid();
                 }
 
-                // Save file to disk
                 var uploadsFolder = Path.Combine(_environment.ContentRootPath, "Uploads", userId);
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
@@ -192,7 +188,6 @@ namespace FileManagementAPI.Controllers
                     await fileUploadDto.File.CopyToAsync(stream);
                 }
 
-                // Save file info to database
                 var fileEntity = new FileEntity
                 {
                     Name = Path.GetFileNameWithoutExtension(fileUploadDto.File.FileName),
@@ -228,7 +223,6 @@ namespace FileManagementAPI.Controllers
                 if (file == null)
                     return NotFound(new { Error = "File not found" });
 
-                // Check if file belongs to user or user is admin
                 if (file.UserId != userId && !User.IsInRole("Admin"))
                     return Forbid();
 
@@ -251,7 +245,7 @@ namespace FileManagementAPI.Controllers
         }
 
         [HttpPut("rename/{id}")]
-        public async Task<IActionResult> RenameFile(int id, [FromBody] RenameFileDto renameFileDto)
+        public async Task<IActionResult> RenameFile(int id, [FromBody] FileRenameDto renameFileDto)
         {
             try
             {
@@ -263,7 +257,6 @@ namespace FileManagementAPI.Controllers
                 if (file == null)
                     return NotFound(new { Error = "File not found" });
 
-                // Check if file belongs to user or user is admin
                 if (file.UserId != userId && !User.IsInRole("Admin"))
                     return Forbid();
 
@@ -294,17 +287,14 @@ namespace FileManagementAPI.Controllers
                 if (file == null)
                     return NotFound(new { Error = "File not found" });
 
-                // Check if file belongs to user or user is admin
                 if (file.UserId != userId && !User.IsInRole("Admin"))
                     return Forbid();
 
-                // Delete physical file
                 if (System.IO.File.Exists(file.FilePath))
                 {
                     System.IO.File.Delete(file.FilePath);
                 }
 
-                // Delete database record
                 _fileRepository.Remove(file);
                 await _fileRepository.SaveChangesAsync();
 

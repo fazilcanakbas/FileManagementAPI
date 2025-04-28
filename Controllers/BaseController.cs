@@ -8,7 +8,7 @@ namespace FileManagementAPI.Controllers
     {
         protected IActionResult HandleError(Exception ex)
         {
-            // Log exception
+            
             Console.WriteLine($"An error occurred: {ex.Message}");
 
             return StatusCode(500, new

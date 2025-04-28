@@ -21,7 +21,6 @@ namespace FileManagementAPI.Models
         {
             base.OnModelCreating(builder);
 
-            // Folder configuration
             builder.Entity<Folder>()
                 .HasOne(f => f.ParentFolder)
                 .WithMany(f => f.SubFolders)
@@ -34,7 +33,6 @@ namespace FileManagementAPI.Models
                 .HasForeignKey(f => f.FolderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // File configuration
             builder.Entity<FileEntity>()
                 .HasOne(f => f.User)
                 .WithMany(u => u.Files)
@@ -47,13 +45,11 @@ namespace FileManagementAPI.Models
                 .HasForeignKey(f => f.FolderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Index configuration for better performance
             builder.Entity<Folder>().HasIndex(f => f.UserId);
             builder.Entity<Folder>().HasIndex(f => f.ParentFolderId);
             builder.Entity<FileEntity>().HasIndex(f => f.UserId);
             builder.Entity<FileEntity>().HasIndex(f => f.FolderId);
 
-            // Seed roles
             builder.Entity<Role>().HasData(
     new Role
     {

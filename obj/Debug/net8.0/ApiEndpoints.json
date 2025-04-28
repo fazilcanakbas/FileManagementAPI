@@ -141,7 +141,7 @@
       },
       {
         "Name": "renameFileDto",
-        "Type": "FileManagementAPI.DTOs.RenameFileDto",
+        "Type": "FileManagementAPI.DTOs.FileRenameDto",
         "IsRequired": true
       }
     ],

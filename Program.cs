@@ -1,3 +1,4 @@
+﻿using FileManagementAPI.Mappings;
 using FileManagementAPI.Models;
 using FileManagementAPI.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,15 +10,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 
-// Configure DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext")));
 
 
-// Configure Identity
 builder.Services.AddIdentity<AppUser, Role>(options =>
 {
     options.Password.RequireDigit = true;
@@ -30,7 +28,6 @@ builder.Services.AddIdentity<AppUser, Role>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-// Configure JWT Authentication
 var jwtConfig = new JwtConfig();
 builder.Configuration.GetSection("JwtConfig").Bind(jwtConfig);
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
@@ -54,12 +51,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Register Repositories
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<FolderRepository>();
 builder.Services.AddScoped<FileRepository>();
 
-// Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -68,16 +63,14 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader());
 });
 
-// Configure Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "File Management API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "File Management Portal", Version = "v1" });
 
-    // Define the security schema
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Description = "jwt token",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -100,13 +93,25 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.Migrate();
+
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+        await SeedData.Initialize(userManager, roleManager);
+    }
 }
 
 app.UseHttpsRedirection();
@@ -118,14 +123,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Create directory for file uploads
 var uploadsDir = Path.Combine(app.Environment.ContentRootPath, "Uploads");
 if (!Directory.Exists(uploadsDir))
 {
     Directory.CreateDirectory(uploadsDir);
 }
-
-// Apply migrations automatically in development
 if (app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())

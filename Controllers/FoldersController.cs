@@ -69,6 +69,7 @@ namespace FileManagementAPI.Controllers
             }
         }
 
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetFolder(int id)
         {
@@ -82,7 +83,6 @@ namespace FileManagementAPI.Controllers
                 if (folder == null)
                     return NotFound(new { Error = "Folder not found" });
 
-                // Check if folder belongs to user or user is admin
                 if (folder.UserId != userId && !User.IsInRole("Admin"))
                     return Forbid();
 
@@ -109,7 +109,6 @@ namespace FileManagementAPI.Controllers
                 if (folder == null)
                     return NotFound(new { Error = "Folder not found" });
 
-                // Check if folder belongs to user or user is admin
                 if (folder.UserId != userId && !User.IsInRole("Admin"))
                     return Forbid();
 
@@ -133,7 +132,6 @@ namespace FileManagementAPI.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized();
 
-                // Check if parent folder exists and belongs to user if specified
                 if (folderCreateDto.ParentFolderId.HasValue)
                 {
                     var parentFolder = await _folderRepository.GetByIdAsync(folderCreateDto.ParentFolderId.Value);
@@ -176,11 +174,9 @@ namespace FileManagementAPI.Controllers
                 if (folder == null)
                     return NotFound(new { Error = "Folder not found" });
 
-                // Check if folder belongs to user or user is admin
                 if (folder.UserId != userId && !User.IsInRole("Admin"))
                     return Forbid();
 
-                // Check if parent folder exists and belongs to user if specified
                 if (folderUpdateDto.ParentFolderId.HasValue)
                 {
                     var parentFolder = await _folderRepository.GetByIdAsync(folderUpdateDto.ParentFolderId.Value);
@@ -190,7 +186,7 @@ namespace FileManagementAPI.Controllers
                     if (parentFolder.UserId != userId && !User.IsInRole("Admin"))
                         return Forbid();
 
-                    // Prevent circular hierarchy
+                   
                     if (parentFolder.Id == folder.Id)
                         return BadRequest(new { Error = "A folder cannot be its own parent" });
                 }
@@ -224,15 +220,13 @@ namespace FileManagementAPI.Controllers
                 if (folder == null)
                     return NotFound(new { Error = "Folder not found" });
 
-                // Check if folder belongs to user or user is admin
                 if (folder.UserId != userId && !User.IsInRole("Admin"))
                     return Forbid();
 
-                // Delete all files in the folder
                 var files = await _fileRepository.GetFilesByFolderIdAsync(id);
                 foreach (var fileEntity in files)
                 {
-                    // Delete physical file
+                   
                     if (System.IO.File.Exists(fileEntity.FilePath))
                     {
                         System.IO.File.Delete(fileEntity.FilePath);
@@ -241,10 +235,8 @@ namespace FileManagementAPI.Controllers
                     _fileRepository.Remove(fileEntity);
                 }
 
-                // Delete all subfolders (recursive delete)
                 await DeleteSubFolders(id);
 
-                // Delete the folder itself
                 _folderRepository.Remove(folder);
                 await _folderRepository.SaveChangesAsync();
 
@@ -262,28 +254,25 @@ namespace FileManagementAPI.Controllers
 
             foreach (var subFolder in subFolders)
             {
-                // Delete all files in the subfolder
                 var files = await _fileRepository.GetFilesByFolderIdAsync(subFolder.Id);
                 foreach (var fileEntity in files)
                 {
-                    // Delete physical file
                     if (System.IO.File.Exists(fileEntity.FilePath))
                     {
                         System.IO.File.Delete(fileEntity.FilePath);
                     }
                     else
                     {
-                        // Dosya yolu geçersiz veya boşsa yapılacak işlem
+                   
                         Console.WriteLine($"Dosya yolu geçersiz: {fileEntity.FilePath}");
                     }
 
                     _fileRepository.Remove(fileEntity);
                 }
 
-                // Recursively delete sub-subfolders
+              
                 await DeleteSubFolders(subFolder.Id);
 
-                // Delete the subfolder
                 _folderRepository.Remove(subFolder);
             }
         }
